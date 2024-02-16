@@ -35,21 +35,21 @@ private:
 	Fish fish3;
 	Fish fish4;
 	Fish fish5;
-	Fish fishs[MAX_PLAYERS] = {fish1, fish2, fish3, fish4, fish5};
+	Fish fishs[MAX_PLAYERS];
 	// Objects (Player)
 	Player player1;
 	Player player2;
 	Player player3;
 	Player player4;
 	Player player5;
-	Player players[MAX_PLAYERS] = {player1, player2, player3, player4, player5};
+	Player players[MAX_PLAYERS];
 	// Objects (Area)
 	Area area1;
 	Area area2;
 	Area area3;
 	Area area4;
 	Area area5;
-	Area areas[MAX_PLAYERS] = { area1, area2, area3, area4, area5 };  // THIS DOES NOT WORK FOR SOME REASON
+	Area areas[MAX_PLAYERS];
 
 	// Events
 	void update(sf::Time t_deltaTime);
@@ -63,6 +63,7 @@ private:
 	// Setups
 	void setupFontAndText();
 	void setupAmountOfPlayers();
+	void setupArrays();
 
 	// Collisions
 	bool fishColliding();

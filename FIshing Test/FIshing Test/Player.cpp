@@ -14,11 +14,11 @@ Player::~Player()
 
 
 // Object (Fish) Functions
-void Player::setupPlayer(sf::Vector2f t_pos)
+void Player::setupPlayer()
 {
 	// Fish
 	m_body.setFillColor(sf::Color::Green);
-	m_body.setPosition(t_pos);
+	m_body.setPosition(m_location);
 	m_body.setSize(m_size);
 }
 

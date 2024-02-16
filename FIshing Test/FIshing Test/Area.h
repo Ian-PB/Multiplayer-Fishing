@@ -11,6 +11,11 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 
+// Constants
+const float HIGHT = 400.0f;
+const float WIDTH = 60.0f;
+const float GAP = 100.0f;
+
 
 class Area
 {
@@ -20,19 +25,16 @@ public:
 	~Area();
 	
 	// Variables
-	const float WIDTH = 60.0f; 
-	const float GAP = 100.0f; 
-
+	
 	// Functions
-	void setupArea(sf::Vector2f t_pos);
+	void setupArea();
 
 	sf::RectangleShape getBody() { return m_body; }
 	sf::Vector2f getPos() { return m_location; }
+	void setPos(sf::Vector2f t_pos) { m_location = t_pos; }
 
 private:
 
-	// Variables
-	const float HIGHT = 400.0f;
 
 	// Area
 	sf::RectangleShape m_body;

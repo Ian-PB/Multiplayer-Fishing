@@ -4,7 +4,6 @@
 
 Fish::Fish()
 {
-	setupFish();
 }
 
 Fish::~Fish()

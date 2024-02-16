@@ -20,6 +20,7 @@ Game::Game() :
 	m_window{ sf::VideoMode{ 800U, 600U, 32U }, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
+	setupArrays(); // sets up arrays with values
 	setupFontAndText(); // load font 
 	setupAmountOfPlayers(); // setup multiple players
 }
@@ -102,6 +103,11 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+
+	if (sf::Keyboard::W == t_event.key.code)
+	{
+		player2.m_reeling = true;
+	}
 }
 
 void Game::processMouseDown(sf::Event t_event)
@@ -123,17 +129,25 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Collisions
 	fishColliding();
-	player1.areaBoundries();
 	player1.catchingCheck(m_colliding);
 
-	// Check if moving
+	// Check if player1 is moving
 	if (player1.m_reeling)
 	{
 		player1.move();
 	}
 
-	// Gravity
-	player1.gravity();
+
+	for (int i = 0; i < playersPlaying; i++)
+	{
+		players[i].areaBoundries();
+
+
+
+		// Gravity
+		players[i].gravity();
+	}
+
 
 	if (m_exitGame)
 	{
@@ -149,80 +163,13 @@ void Game::render()
 	m_window.clear(sf::Color::White);
 	m_window.draw(m_catchingText);
 
-	
-	// Checks how many players are in the game and draws that amount
-	switch (playersPlaying)
+	// Draws each player
+	for (int i = 0; i < playersPlaying; i++)
 	{
-	case 1:
-		// Draw Areas
-		m_window.draw(area1.getBody());
-		// Draw Players
-		m_window.draw(player1.getBody());
-
-		break;
-
-	case 2:
-		// Draw Areas
-		m_window.draw(area1.getBody());
-		m_window.draw(area2.getBody());
-		// Draw Players
-		m_window.draw(player1.getBody());
-		m_window.draw(player2.getBody());
-
-		break;
-
-	case 3:
-		// Draw Areas
-		m_window.draw(area1.getBody());
-		m_window.draw(area2.getBody());
-		m_window.draw(area3.getBody());
-		// Draw Players
-		m_window.draw(player1.getBody());
-		m_window.draw(player2.getBody());
-		m_window.draw(player3.getBody());
-
-		break;
-
-	case 4:
-		// Draw Areas
-		m_window.draw(area1.getBody());
-		m_window.draw(area2.getBody());
-		m_window.draw(area3.getBody());
-		m_window.draw(area4.getBody());
-		// Draw Players
-		m_window.draw(player1.getBody());
-		m_window.draw(player2.getBody());
-		m_window.draw(player3.getBody());
-		m_window.draw(player4.getBody());
-
-		break;
-
-	case 5:
-		// Draw Areas
-		m_window.draw(area1.getBody());
-		m_window.draw(area2.getBody());
-		m_window.draw(area3.getBody());
-		m_window.draw(area4.getBody());
-		m_window.draw(area5.getBody());
-		// Draw Players
-		m_window.draw(player1.getBody());
-		m_window.draw(player2.getBody());
-		m_window.draw(player3.getBody());
-		m_window.draw(player4.getBody());
-		m_window.draw(player5.getBody());
-
-		break;
+		m_window.draw(areas[i].getBody());
+		m_window.draw(players[i].getBody());
+		m_window.draw(fishs[i].getBody());
 	}
-
-	// Currently doesnt work
-	//for (int i = 0; i < playersPlaying; i++)
-	//{
-	//	m_window.draw(players[i].getBody());
-	//	m_window.draw(areas[i].getBody());
-	//	m_window.draw(fishs[i].getBody());
-	//}
-
-	m_window.draw(fish1.getBody());
 
 	
 	m_window.display();
@@ -251,116 +198,47 @@ void Game::setupFontAndText()
 // Sets up each player in the game
 void Game::setupAmountOfPlayers()
 {
-	// Variables needed
-	sf::Vector2f pos1 = area1.getPos();
-	sf::Vector2f pos2 = area2.getPos();
-	sf::Vector2f pos3 = area3.getPos();
-	sf::Vector2f pos4 = area4.getPos();
-	sf::Vector2f pos5 = area5.getPos();
-	
 	// Currently doesnt work
-	//for (int i = 0; i < playersPlaying; i++)
-	//{
-	//	// Players
-	//	sf::Vector2f pos = {areas[i].getPos()};
-	//	pos.x += (areas[i].GAP + areas[i].WIDTH) * i;  // Move the area over
-	//	areas[i].setupArea(pos);
-	//	players[i].setupPlayer(pos);
-	//}
-
-	switch (playersPlaying)
+	for (int i = 0; i < playersPlaying; i++)
 	{
-	case 1:
-		// First Player
-		pos1.x += (area1.GAP + area1.WIDTH) * 0;  // Move the area over
-		area1.setupArea(pos1);
-		player1.setupPlayer(pos1);
+		// Players
+		sf::Vector2f pos = { areas[i].getPos() };
 
-		break;
+		pos.x += (GAP + WIDTH) * i;  // Move the area over
+		// Give new location
+		areas[i].setPos(pos);
+		players[i].setPos(pos += {5.0f, 5.0f});
+		fishs[i].setPos(pos += {5.0f, 300.0f});
 
-	case 2:
-		// First Player
-		pos1.x += (area1.GAP + area1.WIDTH) * 0;  // Move the area over
-		area1.setupArea(pos1);
-		player1.setupPlayer(pos1);
-
-		// Second Player
-		pos2.x += (area2.GAP + area2.WIDTH) * 1;  // Move the area over
-		area2.setupArea(pos2);
-		player2.setupPlayer(pos2 += {5.0f, 5.0f});
-
-		break;
-
-	case 3:
-		// First Player
-		pos1.x += (area1.GAP + area1.WIDTH) * 0;  // Move the area over
-		area1.setupArea(pos1);
-		player1.setupPlayer(pos1);
-
-		// Second Player
-		pos2.x += (area2.GAP + area2.WIDTH) * 1;  // Move the area over
-		area2.setupArea(pos2);
-		player2.setupPlayer(pos2 += {5.0f, 5.0f});
-
-		// Third Player
-		pos3.x += (area3.GAP + area3.WIDTH) * 2;  // Move the area over
-		area3.setupArea(pos3);
-		player3.setupPlayer(pos3 += {5.0f, 5.0f});
-
-		break;
-
-	case 4:
-		// First Player
-		pos1.x += (area1.GAP + area1.WIDTH) * 0;  // Move the area over
-		area1.setupArea(pos1);
-		player1.setupPlayer(pos1);
-
-		// Second Player
-		pos2.x += (area2.GAP + area2.WIDTH) * 1;  // Move the area over
-		area2.setupArea(pos2);
-		player2.setupPlayer(pos2 += {5.0f, 5.0f});
-
-		// Third Player
-		pos3.x += (area3.GAP + area3.WIDTH) * 2;  // Move the area over
-		area3.setupArea(pos3);
-		player3.setupPlayer(pos3 += {5.0f, 5.0f});
-
-		// Forth Player
-		pos4.x += (area4.GAP + area4.WIDTH) * 3;  // Move the area over
-		area4.setupArea(pos4);
-		player4.setupPlayer(pos4 += {5.0f, 5.0f});
-
-		break;
-
-	case 5:
-		// First Player
-		pos1.x += (area1.GAP + area1.WIDTH) * 0;  // Move the area over
-		area1.setupArea(pos1);
-		player1.setupPlayer(pos1);
-
-		// Second Player
-		pos2.x += (area2.GAP + area2.WIDTH) * 1;  // Move the area over
-		area2.setupArea(pos2);
-		player2.setupPlayer(pos2 += {5.0f, 5.0f});
-
-		// Third Player
-		pos3.x += (area3.GAP + area3.WIDTH) * 2;  // Move the area over
-		area3.setupArea(pos3);
-		player3.setupPlayer(pos3 += {5.0f, 5.0f});
-
-		// Forth Player
-		pos4.x += (area4.GAP + area4.WIDTH) * 3;  // Move the area over
-		area4.setupArea(pos4);
-		player4.setupPlayer(pos4 += {5.0f, 5.0f});
-
-		// Fifth Player
-		pos5.x += (area5.GAP + area5.WIDTH) * 4;  // Move the area over
-		area5.setupArea(pos5);
-		player5.setupPlayer(pos5 += {5.0f, 5.0f});
-
-		break;
-
+		// Setup
+		areas[i].setupArea();
+		players[i].setupPlayer();
+		fishs[i].setupFish();
 	}
+}
+
+void Game::setupArrays()
+{
+	// Fish Array
+	fishs[0] = fish1;
+	fishs[1] = fish2;
+	fishs[2] = fish3;
+	fishs[3] = fish4;
+	fishs[4] = fish5;
+
+	// Players Array
+	players[0] = player1;
+	players[1] = player2;
+	players[2] = player3;
+	players[3] = player4;
+	players[4] = player5;
+
+	// Areas Array
+	areas[0] = area1;
+	areas[1] = area2;
+	areas[2] = area3;
+	areas[3] = area4;
+	areas[4] = area5;
 }
 
 // Function that should change the corresponding player's Fish%

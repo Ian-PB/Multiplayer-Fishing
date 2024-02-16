@@ -10,10 +10,10 @@ Area::~Area()
 {
 }
 
-void Area::setupArea(sf::Vector2f t_pos)
+void Area::setupArea()
 {
 	// Fishing Area
 	m_body.setFillColor(sf::Color::Blue);
-	m_body.setPosition(t_pos);
+	m_body.setPosition(m_location);
 	m_body.setSize(m_size);
 }

@@ -23,6 +23,7 @@ public:
 	void setupFish();
 	sf::RectangleShape getBody() { return m_body; }
 	sf::Vector2f getPos() { return m_location; }
+	void setPos(sf::Vector2f t_pos) { m_location = t_pos; }
 
 private:
 

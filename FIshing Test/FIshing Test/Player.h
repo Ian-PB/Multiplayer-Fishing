@@ -11,7 +11,8 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 
-
+// Constants
+const int WIN_CONDITION = 5 * 60; // Seconds needed on fish * Framerate
 
 
 class Player
@@ -22,7 +23,7 @@ public:
 	~Player();
 
 	// Player Functions
-	void setupPlayer(sf::Vector2f t_pos);
+	void setupPlayer();
 	void move();
 	void gravity();
 
@@ -33,6 +34,7 @@ public:
 	// Get Variables
 	sf::RectangleShape getBody() { return m_body; }
 	sf::Vector2f getPos() { return m_location; }
+	void setPos(sf::Vector2f t_pos) { m_location = t_pos; }
 	int getCatchingMeter() { return m_catchingMeter; }
 
 	// Public Variables
@@ -47,7 +49,6 @@ private:
 	sf::Vector2f m_size = { 50.0f, 100.0f };
 
 	// Catching
-	const int WIN_CONDITION = 5 * 60; // Seconds needed on fish * Framerate
 	int m_catchingMeter = 0;
 
 	// Gravity
